@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: supabase_admin
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: supabase_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    restart: always
+    environment:
+      SUPABASE_DB_URL: postgres://supabase_admin:yourpassword@db:5432/supabase_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  db-data:
